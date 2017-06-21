@@ -22,7 +22,7 @@ class GoogleChannel < ActiveRecord::Base
         
         service = client.discovered_api('calendar', 'v3')
         
-        begin
+        #begin
             res = client.execute!(
               api_method: service.events.watch,
               parameters: { calendarId: calendarId },
@@ -70,9 +70,10 @@ class GoogleChannel < ActiveRecord::Base
               puts res
         	end
     	
-    	rescue
-            @@status = "選択したGoogleのアカウントIDと入力したアカウント情報が一致していません" 
-        end
+    	#rescue
+    	#    debugger
+        #    @@status = "選択したGoogleのアカウントIDと入力したアカウント情報が一致していません" 
+        #end
     	
     	@status = @@status
     	return @status

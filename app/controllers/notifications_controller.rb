@@ -118,27 +118,34 @@ class NotificationsController < ApplicationController
       endStr = ""
       
       items.each do |item|
-        email = item["creator"]["email"]
-        startStr = item["start"]["dateTime"]
-        endStr = item["end"]["dateTime"]
         
-        #debugger
-        if startStr.blank?
-          startStr = item["start"]["date"]
-        end
-        if endStr.blank?
-          endStr = item["end"]["date"]
-        end 
-        
-        #登録ユーザのアクセス権を取得
-        callconnectapi(email, email, startStr, endStr, lockId)
-        
-        #追加メンバーのアクセス権を取得
-        attendees = item["attendees"]
-        if !attendees.blank?
-          attendees.each do |attendee|
-            addemail = attendee["email"]
-            callconnectapi(email, addemail, startStr, endStr, lockId)
+        if item["status"] != "cancelled"
+          email = item["creator"]["email"]
+          startStr = item["start"]["dateTime"]
+          endStr = item["end"]["dateTime"]
+          
+          #debugger
+          if startStr.blank?
+            startStr = item["start"]["date"]
+          end
+          if endStr.blank?
+            endStr = item["end"]["date"]
+          end 
+          
+          
+          #登録ユーザのアクセス権を取得
+          callconnectapi(email, email, startStr, endStr, lockId)
+          
+          #追加メンバーのアクセス権を取得
+          attendees = item["attendees"]
+          if !attendees.blank?
+            attendees.each do |attendee|
+              addemail = attendee["email"]
+              if ((addemail != email) && (addemail != "kke.co.jp_2d3337313238383832353636@resource.calendar.google.com"))
+                
+                callconnectapi(email, addemail, startStr, endStr, lockId)
+              end 
+            end
           end
         end
       end

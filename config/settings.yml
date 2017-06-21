@@ -19,19 +19,24 @@ development:
         client: "248b4559af5bbdf84998f5c092bc8d9fac784712f28009168c0a1579818aef47"
         secret: "b88822e0976b6e6a9fb0096a3b1c860b12f9a405fd2d0597a1d60cf68473ac46"
         uuid: "c0ee6144-3734-4e11-b4be-c35e4abdc05c"
-    google:
-        #user_name: "yumikokke@gmail.com"
-        user_name: "A"
-        client: "841258018012-jqn06q4ifmfvbj5ip42rvtemetcga7oj.apps.googleusercontent.com"
-        secret: "HuQ43i5_NiqOeOIZca4oJttJ"
-        calendar_id: "i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com"
-        google-site-verification: '<meta name="google-site-verification" content="yXHeDhmd4GXL3-G-H0JweJuPZspzF_8IPRkmmBqC2Iw" />'
     #google:
-    #    user_name: "kke.remotelock@gmail.com"
-    #    client: "404180661728-qotv9so92qt4pp6s7v9jlmheik6bespe.apps.googleusercontent.com"
-    #    secret: "_ZS6_pVing3DInTzpJ7c3QpJ"
-    #    calendar_id: "g8ukpibvlfle41hplt1g3rplu0@group.calendar.google.com"
-    #    google-site-verification: '<meta name="google-site-verification" content="mwXIsAM7T9kSRBW3kjGPEP7LkI_CATVt0eJgBTmK-es" />'
+    #    #user_name: "yumikokke@gmail.com"
+    #    user_name: "A"
+    #    client: "841258018012-jqn06q4ifmfvbj5ip42rvtemetcga7oj.apps.googleusercontent.com"
+    #    secret: "HuQ43i5_NiqOeOIZca4oJttJ"
+    #    calendar_id: "i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com"
+    #    google-site-verification: '<meta name="google-site-verification" content="yXHeDhmd4GXL3-G-H0JweJuPZspzF_8IPRkmmBqC2Iw" />'
+    
+    #rakumo用
+    google:
+        user_name: "yumiko-tsunai@kke.co.jp"
+        client: "411801363064-bb63m8jaerksepgrm7rifp493p0srf7g.apps.googleusercontent.com"
+        secret: "zAkj-odUUHsmxSasz8dZs3KP"
+        #個人用
+        calendar_id: "remotelock-calender@kke.co.jp"
+        #施設用リソースID
+        #calendar_id: "kke.co.jp_2d3337313238383832353636@resource.calendar.google.com"
+        google-site-verification: '<meta name="google-site-verification" content="GjrpZTTl2nFPzC_HV8t4yWwnEfIY2gRa8zr9zFqCnvM" />'
     
 #APP_CONFIG["connect"]["client"]
     
