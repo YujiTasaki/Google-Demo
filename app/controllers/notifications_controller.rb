@@ -1,6 +1,7 @@
 include ConnectHttp
 require 'google/api_client'
 require 'json'
+require 'date'
 
 
 class NotificationsController < ApplicationController
@@ -164,18 +165,26 @@ class NotificationsController < ApplicationController
   #ConnectApiメソッド呼出し
   def callconnectapi(email, addemail, startStr, endStr, lockId)
     if @@email != email or @@startStr != startStr or @@endStr != endStr
+      
       #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00 の文字列を削除(JST)）
       #startDatetime = startStr.to_datetime - Rational(9, 24)  
-      startAt = startStr.slice(0,19)
-      #endDatetime = endStr.to_datetime - Rational(9, 24)  
-      endAt = endStr.slice(0,19)
+      #endDatetime = endStr.to_datetime - Rational(9, 24)
       
+      #startAt = startStr.slice(0,19)
+      #30分前の時刻
+      startTime = ((startStr.to_datetime - Rational(30,24*60)).to_s).slice(0,19)
+        
+      #endAt = endStr.slice(0,19)
+      #30分後の時刻
+      endTime = ((endStr.to_datetime + Rational(30,24*60)).to_s).slice(0,19)
+      
+      debugger
       #アクセスゲストの作成
-      res = ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
+      res = ConnectApiExec.createguests(addemail,startTime,endTime,lockId)
       
       #PINコードが被った場合は、再作成
       while res.code == 422
-        res = ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
+        res = ConnectApiExec.createguests(addemail,startTime,endTime,lockId)
       end
       
       if res.code != 200 and res.code != 201 then
