@@ -178,7 +178,6 @@ class NotificationsController < ApplicationController
       #30分後の時刻
       endTime = ((endStr.to_datetime + Rational(30,24*60)).to_s).slice(0,19)
       
-      debugger
       #アクセスゲストの作成
       res = ConnectApiExec.createguests(addemail,startTime,endTime,lockId)
       
