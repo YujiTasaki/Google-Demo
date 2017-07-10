@@ -11,18 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170315065258) do
+ActiveRecord::Schema.define(version: 20170710052652) do
 
   create_table "calendar_to_locks", force: :cascade do |t|
     t.string   "calendar_id"
     t.string   "lock_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-  end
-
-  create_table "connect_accesspeople", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "connect_accounts", force: :cascade do |t|
@@ -64,13 +59,6 @@ ActiveRecord::Schema.define(version: 20170315065258) do
   create_table "google_api_execs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "google_calendars", force: :cascade do |t|
-    t.string   "calendar_id"
-    t.string   "account_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
   end
 
   create_table "google_channels", force: :cascade do |t|
