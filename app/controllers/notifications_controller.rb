@@ -145,6 +145,16 @@ class NotificationsController < ApplicationController
           #新規作成
             calendarGuest = CalendarGuest.new(event_id: @eventId) 
             calendarGuest.save
+          else
+          
+          #eventIdが存在する場合は、userIdを検索して削除
+            userId = CalendarGuest.find_by(event_id: @eventId).user_id
+            res = ConnectApiExec.deleteguests(userId)
+            if res.code == 204
+              puts("ゲスト削除に成功")
+            else
+              puts("ゲスト削除に失敗")
+            end
           end
           
           
@@ -228,7 +238,7 @@ class NotificationsController < ApplicationController
           #更新
       	  calendarGuest = CalendarGuest.find_by(event_id: @eventId)
       	  calendarGuest.update_attributes(:user_id => userId)
-        
+          
         end
         
         
