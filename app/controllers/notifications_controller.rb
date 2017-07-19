@@ -16,12 +16,14 @@ class NotificationsController < ApplicationController
   @@email = ""
   @@startStr = ""
   @@endStr = ""
+  #@@eventId = ""
   
   #push notificationの受取り
   def callback
     
 	  @@count = @@count + 1
 	  puts(@@count) 
+	  
 	  
     #googleCalendarからのrequest情報
     channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]#これで判定する。
@@ -119,19 +121,31 @@ class NotificationsController < ApplicationController
       endStr = ""
       
       items.each do |item|
+        @eventId = item["id"]
+        status = item["status"]
+        sequence = item["sequence"]
         
-        if item["status"] != "cancelled"
+        case status
+        #新規、変更の場合（変更の場合は、新規作成のみで削除はできない..）
+        when "confirmed" then
           email = item["creator"]["email"]
           startStr = item["start"]["dateTime"]
           endStr = item["end"]["dateTime"]
           
-          #debugger
+          #時間指定ではなく日付指定の場合
           if startStr.blank?
             startStr = item["start"]["date"]
           end
           if endStr.blank?
             endStr = item["end"]["date"]
           end 
+          
+          #CalendarGuestテーブルにitem_idを保存
+          if CalendarGuest.find_by(event_id: @eventId) == nil
+          #新規作成
+            calendarGuest = CalendarGuest.new(event_id: @eventId) 
+            calendarGuest.save
+          end
           
           
           #登録ユーザのアクセス権を取得
@@ -143,11 +157,23 @@ class NotificationsController < ApplicationController
             attendees.each do |attendee|
               addemail = attendee["email"]
               if ((addemail != email) && (addemail != "kke.co.jp_2d3337313238383832353636@resource.calendar.google.com"))
-                
                 callconnectapi(email, addemail, startStr, endStr, lockId)
               end 
             end
           end
+        #削除の場合
+        when "cancelled" then
+          #CalendarGuestからevent_idをキーにしてuser_idを検索
+          calendarGuest = CalendarGuest.find_by(event_id: @eventId)
+          userId = calendarGuest.user_id
+          #user_idをキーにしてconnectのguest削除
+          res = ConnectApiExec.deleteguests(userId)
+          if res.code == 204
+            puts("ゲスト削除に成功")
+          else
+            puts("ゲスト削除に失敗")
+          end
+          
         end
       end
       
@@ -162,7 +188,7 @@ class NotificationsController < ApplicationController
   end
   
   
-  #ConnectApiメソッド呼出し
+  #アクセスゲスト作成
   def callconnectapi(email, addemail, startStr, endStr, lockId)
     if @@email != email or @@startStr != startStr or @@endStr != endStr
       
@@ -195,6 +221,16 @@ class NotificationsController < ApplicationController
         j = ActiveSupport::JSON.decode(res.body)
         data = j["data"]
         userId = data["id"]
+        
+        #eventIdをキーにしてユーザーIDを保存
+        if CalendarGuest.find_by(event_id: @eventId) != nil
+          
+          #更新
+      	  calendarGuest = CalendarGuest.find_by(event_id: @eventId)
+      	  calendarGuest.update_attributes(:user_id => userId)
+        
+        end
+        
         
         #アクセスゲストとデバイス紐付け
         res = ConnectApiExec.appendguest2lock(userId, lockId)

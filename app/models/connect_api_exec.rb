@@ -98,4 +98,18 @@ class ConnectApiExec
         return
     end
     
+    #アクセスゲスト削除
+    def self.deleteguests(userId)
+        
+        authtoken = "Bearer "+ ConnectToken.find_by(key: "demo@remotelock.com").access_token
+        res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken )
+        .delete("https://api.lockstate.jp/access_persons/" + userId, :ssl_context => CTX )
+        
+        return res
+        
+    end
+    
+    
+    
+    
 end
