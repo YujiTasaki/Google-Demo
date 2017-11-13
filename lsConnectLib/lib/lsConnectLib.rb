@@ -10,6 +10,7 @@ module TestGem
 
   class << self
     attr_accessor :client_id, :clientSecret_id
+    #aa
 
     attr_reader :max_network_retry_delay, :initial_network_retry_delay
   end  
