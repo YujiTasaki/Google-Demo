@@ -16,16 +16,18 @@ class ConnecthookupController < ApplicationController
   end
     
   def getcode
+    print('getcode来た')
     @@key = 	params[:email].presence	|| APP_CONFIG["connect"]["user_name"]
     @@client =	params[:clientId].presence || APP_CONFIG["connect"]["client"]
     @@secret =	params[:clientSecret].presence || APP_CONFIG["connect"]["secret"]
-    @@callbackuri = URI.encode(APP_CONFIG["webhost"]+'connecthookup/callback')
+    #@@callbackuri = URI.encode(APP_CONFIG["webhost"]+'connecthookup/callback')
+    @@callbackuri = 'https://rails-tutorial-kke1573.c9users.io/connecthookup/callback'
     #params[:uuId]
     
-    if ConnectAccount.find_by(key: @@key) == nil
-      account = ConnectAccount.new(key: @@key,client_id: @@client,client_secret: @@secret)
-      account.save
-    end
+    #if ConnectAccount.find_by(key: @@key) == nil
+    #  account = ConnectAccount.new(key: @@key,client_id: @@client,client_secret: @@secret)
+    #  account.save
+    #end
     
     req = 'https://connect.lockstate.jp/oauth/'+'authorize?'+'client_id='+@@client+'&response_type=code&redirect_uri='+@@callbackuri
     redirect_to req
@@ -40,9 +42,11 @@ class ConnecthookupController < ApplicationController
     ,'redirect_uri' => @@callbackuri\
     ,'grant_type' => 'authorization_code' }
     
+    
+    
     res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded")
     .post("https://connect.lockstate.jp/oauth/token", :ssl_context => CTX , :form => postform)
-    
+   
     if res.code!=200
       @res = res
       @error = res

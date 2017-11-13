@@ -5,7 +5,8 @@ require "sidetiq/web"
 Rails.application.routes.draw do
   
   
-  root 'hookup#setup'
+  #root 'hookup#setup'
+  root 'connecthookup#setup'
   
   get 'hookup/setup'
   
